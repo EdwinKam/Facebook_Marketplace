@@ -1,0 +1,27 @@
+{
+  "name": "cse183-assignment8-e2etest",
+  "version": "1.0.0",
+  "description": "CSE183 Assignment 8 - End to End Test",
+  "author": "David Harrison <dcharris@ucsc.edu>",
+  "license": "UNLICENSED",
+  "repository": "none",
+  "devDependencies": {
+    "dotenv": "*",
+    "express": "*",
+    "http-proxy-middleware": "*",
+    "jest": "*",
+    "puppeteer": "*",
+    "puppeteer-core": "*",
+    "supertest": "*"
+  },
+  "jest": {
+    "testMatch": [
+      "**/?(*.)+(spec|test).[jt]s?(x)"
+    ]
+  },
+  "scripts": {
+    "build": "cd ../frontend && npm run build",
+    "e2e": "jest --runInBand --verbose --forceExit --detectOpenHandles",
+    "test": "(npm run build) && (npm run e2e)"
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "name": "cse183-assignment8-frontend",
+  "version": "2.0.0",
+  "description": "CSE183 Assignment 8 - Frontend",
+  "author": "David Harrison <dcharris@ucsc.edu>",
+  "license": "UNLICENSED",
+  "repository": "none",
+  "proxy": "http://localhost:3010",
+  "dependencies": {
+    "@emotion/styled": "*",
+    "@emotion/react": "*",
+    "@material-ui/core": "*",
+    "@material-ui/icons": "*",
+    "@mui/material": "*",
+    "@mui/icons-material": "*",
+    "emoji-picker-react": "*",
+    "prop-types": "*",
+    "react": "*",
+    "react-router": "5.2.1",
+    "react-router-dom": "5.3.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "*",
+    "@testing-library/react": "*",
+    "@testing-library/user-event": "*",
+    "bestzip": "*",
+    "eslint-config-google": "*",
+    "eslint-plugin-react": "*",
+    "eslint-plugin-react-hooks": "*",
+    "msw": "*",
+    "puppeteer": "*",
+    "puppeteer-core": "*",
+    "react-scripts": "*"
+  },
+  "scripts": {
+    "build": "react-scripts build",
+    "start": "react-scripts start",
+    "test": "react-scripts test --coverage",
+    "lint": "eslint ./src/*/*.js ./src/*.js ./src/components/__tests__/*.js"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!src/index.js"
+    ],
+    "testMatch": [
+      "**/?(*.)+(spec|test).[jt]s?(x)"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest",
+      "google"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 12
+    },
+    "rules": {
+      "indent": [
+        "warn",
+        2
+      ]
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

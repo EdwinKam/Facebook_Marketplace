@@ -1,0 +1,451 @@
+#
+# CSE183 Assignment 8 Backend
+#
+
+openapi: '3.0.3'
+
+info:
+  description: CSE183 Assignment 8 Backend
+  version: 0.1.0
+  title: CSE183 Assignment 8 Backend
+
+servers:
+  - url: http://localhost:3010/v0
+
+paths:
+  /listings:
+    get: 
+      description: gets all the listing
+      security: []
+      parameters:
+        - in: query
+          name: productName
+          schema:
+            type: string
+          required: false
+          description: product name
+        - name: category
+          in: query
+          required: true
+          description: select category/subcategory from available
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+              - all
+              - electronics
+              - apparel
+              - cell phones
+              - flash drives
+              - iphone
+              - android
+              - men
+              - women
+        - name: condition
+          in: query
+          required: true
+          description: condition filters
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+              - all
+              - new
+              - used
+        - name: delivery
+          in: query
+          required: true
+          description: delivery filter
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+              - all
+              - local pickup
+              - shipping
+      responses: 
+        200: 
+          description: sucessful
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/List'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+    post:
+      description: post a new listing
+      requestBody:
+        description: listing to post
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/newListing'
+      responses:
+        201:
+          description: application response
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/newListing' ####
+        400:
+          description: invalid listing property
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /category:
+    get: 
+      description: gets all categories
+      security: []
+      responses: 
+        200: 
+          description: sucessful
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/category'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /search:
+    get:
+      description: search listing by keyword
+      security: []
+      parameters:
+        - name: search
+          in: query
+          required: true
+          description: enter a key word to search
+          schema:
+            type: string
+      responses:
+        200:
+          description: application response
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/List'
+        404:
+          description: no such listing
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /comments/{id}:
+    get: 
+      description: Gets all comment of the post
+      security: []
+      parameters:
+      - name: id
+        in: path
+        description: id of the post
+        required: true
+        schema:
+          type: string
+      responses: 
+        200: 
+          description: Successful
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Comment'
+    
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      description: add new comment to the post
+      security: []
+      parameters:
+      - name: id
+        in: path
+        description: ID of the post
+        required: true
+        schema:
+          type: string
+      - name: user
+        in: query
+        description: who commented this
+        required: true
+        schema:
+          type: string
+      - name: comment
+        in: query
+        description: comment that you want to add
+        required: true
+        schema:
+          type: string
+      responses:
+        204:
+          description: succuss
+        404:
+          description: post not found
+        default:
+          description: Unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users:
+    get: 
+      description: Gets all user data
+      security: []
+      responses: 
+        200: 
+          description: Successful
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/UserDataList'
+    
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      description: Posts a new user
+      security: []
+      requestBody:
+        description: Registers a new user
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+      responses:
+        201:
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserData'
+        409:
+          description: User with the same email already exists
+        400:
+          description: User has unexpected properties
+
+  /users/{email}:
+    get:
+      description: Returns a user by email
+      security: []
+      parameters:
+      - name: email
+        in: path
+        description: The user's Email
+        required: true
+        schema:
+          type: string
+          format: email
+      responses:
+        200:
+          description: User response
+          content:
+            applicaiton/json:
+              schema:
+                $ref: '#/components/schemas/UserData'
+        404:
+          description: Not Found
+  /userposts/{id}:
+    get:
+      description: Returns user's posts
+      security: []
+      parameters:
+      - name: id
+        in: path
+        description: The user's id
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: User response
+          content:
+            applicaiton/json:
+              schema:
+                $ref: '#/components/schemas/UserPosts'
+        404:
+          description: Not Found
+  
+  /dummy:
+    get:
+      description: Dummy Endpoint
+      security: []
+      responses:
+        200:
+          description: Succesful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DummyResponse'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    List:
+      type: array
+      items:
+        $ref: '#/components/schemas/Listing'
+    
+    Listing:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        user:
+          type: string
+          format: uuid
+        category:
+          type: string
+        name:
+          type: string
+        price:
+          type: string
+        condition:
+          type: string
+        delivery: 
+          type: string
+        pic:
+          type: array
+          items: 
+            type: string
+        description:
+          type: string
+    category:
+      type: array
+      items:
+        type: object
+    Comment:
+      type: array
+      items:
+        type: object
+    newListing:
+      type: object
+      properties:
+        user:
+          type: string
+          format: uuid
+        category:
+          type: string 
+        listing:
+          type: object
+          properties:
+            name:
+              type: string
+            price:
+              type: string
+            pic:
+              type: array
+              items: 
+                type: string
+            condition:
+              type: string
+            delivery:
+              type: string
+            description:
+              type: string
+            responses:
+              type: array
+              items: 
+                type: string
+         
+    UserDataList:
+      type: array
+      items:
+        $ref: '#/components/schemas/UserData'
+    UserPosts:
+      type: object
+    
+    UserDataObject:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        member:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserData'
+
+    UserData:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/UserName'
+        email:
+          type: string
+        password:
+          type: string
+    
+    UserRegister:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/UserName'
+        email:
+          type: string
+          format: email
+        password:
+          type: string 
+
+    UserName:
+      type: object
+      properties:
+        first: 
+          type: string
+        last:
+          type: string
+
+
+    Error:
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+      required:
+        - code
+        - message
+
+    DummyResponse:
+      properties:
+        message:
+          type: string
+      required:
+        - message
+
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+
+security:
+  - bearerAuth: []         # use the same name as above
